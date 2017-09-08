@@ -6,8 +6,8 @@
 #include <string.h>
 #include <stdlib.h>
 
-#define BUF_LEN 1000
-#define DEPTH_MAX 128
+#define BUF_LEN 1024
+#define DEPTH 64
 #define DIR_MAX 256
 
 typedef struct watch{
@@ -110,7 +110,7 @@ int list_dir(char* path, int depth)
         memset(full_path, 0, sizeof(full_path) / sizeof(char));
         sprintf(full_path, "%s/%s", path, file->d_name);
 
-        if(stat(full_path, &st) >= 0 && S_ISDIR(st.st_mode) && depth <= DEPTH_MAX)
+        if(stat(full_path, &st) >= 0 && S_ISDIR(st.st_mode) && depth <= DEPTH)
         {
             strcpy(dirs[dirs_len++], full_path);
             list_dir(full_path, depth + 1);
