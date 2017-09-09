@@ -25,6 +25,39 @@ int dirs_len = 0;
 
 size_t flags = IN_CREATE | IN_CLOSE_WRITE | IN_MOVE | IN_MOVE_SELF | IN_DELETE | IN_DELETE_SELF;
 
+
+void list_dir(char* path, int depth)
+{
+    DIR *d;
+    struct dirent *file;
+    struct stat st;
+    char full_path[PATH_MAX] = {0};
+
+    if(!(d = opendir(path)))
+    {
+        printf("opendir failed[%s]\n", path);
+        return;
+    }
+
+    while((file = readdir(d)) != NULL)
+    {
+        if(strncmp(file->d_name, ".", 1) == 0)
+        {
+            continue;
+        }
+
+        memset(full_path, 0, sizeof(full_path) / sizeof(char));
+        sprintf(full_path, "%s/%s", path, file->d_name);
+
+        if(stat(full_path, &st) >= 0 && S_ISDIR(st.st_mode) && depth <= DEPTH)
+        {
+            strcpy(dirs[dirs_len++], full_path);
+            list_dir(full_path, depth + 1);
+        }
+    }
+    closedir(d);
+}
+
 void handle_notify(int fd, struct inotify_event *event)
 {
     if(event->mask & IN_ISDIR)
@@ -94,39 +127,7 @@ void handle_notify(int fd, struct inotify_event *event)
     }
 }
 
-void list_dir(char* path, int depth)
-{
-    DIR *d;
-    struct dirent *file;
-    struct stat st;
-    char full_path[PATH_MAX] = {0};
-
-    if(!(d = opendir(path)))
-    {
-        printf("opendir failed[%s]\n", path);
-        return;
-    }
-
-    while((file = readdir(d)) != NULL)
-    {
-        if(strncmp(file->d_name, ".", 1) == 0)
-        {
-            continue;
-        }
-
-        memset(full_path, 0, sizeof(full_path) / sizeof(char));
-        sprintf(full_path, "%s/%s", path, file->d_name);
-
-        if(stat(full_path, &st) >= 0 && S_ISDIR(st.st_mode) && depth <= DEPTH)
-        {
-            strcpy(dirs[dirs_len++], full_path);
-            list_dir(full_path, depth + 1);
-        }
-    }
-    closedir(d);
-}
-
-void init_notify(char **path)
+void do_notify(char **path)
 {
     for(int i = 0;i < sizeof(path) / sizeof(char *);i++)
     {
@@ -181,7 +182,7 @@ void init_notify(char **path)
     }
 }
 
-void handle_select(int fd)
+void handle_watch(int fd)
 {
     char buf[BUF_LEN];
     size_t read_len;
@@ -202,7 +203,7 @@ void handle_select(int fd)
     }
 }
 
-void do_select()
+void do_watch()
 {
     fd_set rd;
     while(1)
@@ -235,7 +236,7 @@ void do_select()
             int fd = notify_p[i];
             if(FD_ISSET(fd, &rd))
             {
-                handle_select(fd);
+                handle_watch(fd);
             }
         }
     }
@@ -244,7 +245,7 @@ void do_select()
 int main(int argc,char **argv)
 {
     char *path[1] = {"/home/zhengdongtian/CLionProjects/fnotify"};
-    init_notify(path);
+    do_notify(path);
 
     if(notify_p == NULL || s_watch_p == NULL)
     {
@@ -252,7 +253,7 @@ int main(int argc,char **argv)
         return 1;
     }
 
-    do_select();
+    do_watch();
 
     return 0;
 }
