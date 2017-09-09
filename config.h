@@ -13,7 +13,7 @@
 #include <errno.h>
 #include "def.h"
 
-#define KEY_VALUE_LEN 256
+#define KEY_VALUE_LEN PATH_MAX
 
 void config(char *conf);
 
