@@ -32,10 +32,10 @@ void handle_watch(s_notify *ntf)
 void watch()
 {
     struct timeval tv;
-    tv.tv_sec = 1;
-    fd_set rd;
     while(1)
     {
+        tv.tv_sec = 1;
+        fd_set rd;
         int max_fd = 0;
         FD_ZERO(&rd);
         for(int i = 0;i < s_notify_p_len;i++)
