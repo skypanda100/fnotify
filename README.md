@@ -4,7 +4,8 @@
 要想不麻烦就得需要个守护进程，既能感知我新增了博文，删除了博文，更新了博文，又能在感知后自动build。  
 应付这个问题，可以采用inotify + select来解决。inotify能对文件系统上的一切操作做出回应，而select可以进行io的多路复用。
 
-# Example Usage 
+# Example Usage
+*project's path is `/root/fnotify`*
 * build  
     ```ini
     $ cd /root/fnotify
@@ -27,5 +28,6 @@
 * execute  
 *because of deamon(0, 0),please set the conf's absolute path to the argument*
     ```ini
-    $ fnotify /root/fnotify/fnotify.conf
+    $ cd /root/fnotify
+    $ ./fnotify /root/fnotify/fnotify.conf
     ```
