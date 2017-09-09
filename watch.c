@@ -34,8 +34,7 @@ void watch()
     struct timeval tv;
     while(1)
     {
-        sleep(1);
-        tv.tv_sec = 0;
+        tv.tv_sec = 1;
         tv.tv_usec = 0;
 
         fd_set rd;
