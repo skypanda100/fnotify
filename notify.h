@@ -7,7 +7,6 @@
 
 #include <sys/inotify.h>
 #include <stdio.h>
-#include <limits.h>
 #include <string.h>
 #include <stdlib.h>
 #include <dirent.h>

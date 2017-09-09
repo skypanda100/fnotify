@@ -5,13 +5,12 @@
 #ifndef FNOTIFY_DEF_H
 #define FNOTIFY_DEF_H
 
-#include <limits.h>
 #include <sys/time.h>
 
 #define BUF_LEN 1024
 #define DEPTH 64
 #define DIR_MAX 256
-
+#define PATH_MAX 4096
 typedef struct watch
 {
     int wd;

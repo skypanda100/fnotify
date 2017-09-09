@@ -12,45 +12,45 @@ static char *key_path = "path";
 static char *key_cmd = "cmd";
 static char *key_delay = "delay";
 
-static char *l_trim(char *szOutput, const char *szInput)
+static char *l_trim(char *output, const char *input)
 {
-    assert(szInput != NULL);
-    assert(szOutput != NULL);
-    assert(szOutput != szInput);
-    for(NULL; *szInput != '\0' && isspace(*szInput); ++szInput)
+    assert(input != NULL);
+    assert(output != NULL);
+    assert(output != input);
+    for(;*input != '\0' && isspace(*input);++input)
     {
         ;
     }
-    return strcpy(szOutput, szInput);
+    return strcpy(output, input);
 }
 
-static char *r_trim(char *szOutput, const char *szInput)
+/*static char *r_trim(char *output, const char *input)
 {
     char *p = NULL;
-    assert(szInput != NULL);
-    assert(szOutput != NULL);
-    assert(szOutput != szInput);
-    strcpy(szOutput, szInput);
-    for(p = szOutput + strlen(szOutput) - 1; p >= szOutput && isspace(*p); --p)
+    assert(input != NULL);
+    assert(output != NULL);
+    assert(output != input);
+    strcpy(output, input);
+    for(p = output + strlen(output) - 1; p >= output && isspace(*p); --p)
     {
         ;
     }
     *(++p) = '\0';
-    return szOutput;
-}
+    return output;
+}*/
 
-static char * a_trim(char * szOutput, const char * szInput)
+static char * a_trim(char * output, const char * input)
 {
     char *p = NULL;
-    assert(szInput != NULL);
-    assert(szOutput != NULL);
-    l_trim(szOutput, szInput);
-    for(p = szOutput + strlen(szOutput) - 1;p >= szOutput && isspace(*p); --p)
+    assert(input != NULL);
+    assert(output != NULL);
+    l_trim(output, input);
+    for(p = output + strlen(output) - 1;p >= output && isspace(*p); --p)
     {
         ;
     }
     *(++p) = '\0';
-    return szOutput;
+    return output;
 }
 
 
@@ -114,7 +114,7 @@ void config(char *conf)
                     sscanf(++c, "%[^\n]", val_path);
                     char *val_o = (char *)malloc(strlen(val_path) + 1);
                     if(val_o != NULL){
-                        memset(val_o, 0, sizeof(val_o));
+                        memset(val_o, 0, strlen(val_path) + 1);
                         a_trim(val_o, val_path);
                         if(val_o && strlen(val_o) > 0)
                             strcpy(val_path, val_o);
@@ -148,7 +148,7 @@ void config(char *conf)
                     sscanf(++c, "%[^\n]", val_cmd);
                     char *val_o = (char *)malloc(strlen(val_cmd) + 1);
                     if(val_o != NULL){
-                        memset(val_o, 0, sizeof(val_o));
+                        memset(val_o, 0, strlen(val_cmd) + 1);
                         a_trim(val_o, val_cmd);
                         if(val_o && strlen(val_o) > 0)
                             strcpy(val_cmd, val_o);
@@ -183,7 +183,7 @@ void config(char *conf)
                     sscanf(++c, "%[^\n]", val);
                     char *val_o = (char *)malloc(strlen(val) + 1);
                     if(val_o != NULL){
-                        memset(val_o, 0, sizeof(val_o));
+                        memset(val_o, 0, strlen(val) + 1);
                         a_trim(val_o, val);
                         if(val_o && strlen(val_o) > 0)
                             strcpy(val, val_o);
