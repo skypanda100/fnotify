@@ -5,22 +5,17 @@
 #include "watch.h"
 #include "notify.h"
 
-extern s_watch **s_watch_p;
-extern int *s_watch_p_len;
-extern int *notify_p;
-extern int notify_p_len;
-extern size_t flags;
-extern char dirs[DIR_MAX][PATH_MAX];
-extern int dirs_len;
+extern s_notify *s_notify_p;
+extern int s_notify_p_len;
 
-void handle_watch(int fd)
+void handle_watch(s_notify *ntf)
 {
     char buf[BUF_LEN];
     size_t read_len;
     char *p;
     struct inotify_event *event;
 
-    read_len = read(fd, buf, BUF_LEN);
+    read_len = read(ntf->notify_fd, buf, BUF_LEN);
     if(read_len == -1)
     {
         printf("read failed\n");
@@ -29,7 +24,7 @@ void handle_watch(int fd)
     for(p=buf;p < buf+read_len;)
     {
         event = (struct inotify_event *)p;
-        handle_notify(fd, event);
+        handle_notify(ntf, event);
         p += sizeof(struct inotify_event) + event->len;
     }
 }
@@ -41,12 +36,12 @@ void watch()
     {
         int max_fd = 0;
         FD_ZERO(&rd);
-        for(int i = 0;i < notify_p_len;i++)
+        for(int i = 0;i < s_notify_p_len;i++)
         {
-            FD_SET(notify_p[i], &rd);
-            if(max_fd < notify_p[i])
+            FD_SET(s_notify_p[i].notify_fd, &rd);
+            if(max_fd < s_notify_p[i].notify_fd)
             {
-                max_fd = notify_p[i];
+                max_fd = s_notify_p[i].notify_fd;
             }
         }
 
@@ -62,12 +57,11 @@ void watch()
             continue;
         }
 
-        for(int i = 0; i < notify_p_len;i++)
+        for(int i = 0; i < s_notify_p_len;i++)
         {
-            int fd = notify_p[i];
-            if(FD_ISSET(fd, &rd))
+            if(FD_ISSET(s_notify_p[i].notify_fd, &rd))
             {
-                handle_watch(fd);
+                handle_watch(&(s_notify_p[i]));
             }
         }
     }

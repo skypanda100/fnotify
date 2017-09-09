@@ -23,4 +23,13 @@ typedef struct conf
     char cmd[PATH_MAX];
     int delay;
 }s_conf;
+
+typedef struct notify
+{
+    s_conf conf;
+    int notify_fd;
+    s_watch *s_watch_p;
+    int s_watch_p_len;
+}s_notify;
+
 #endif //FNOTIFY_DEF_H

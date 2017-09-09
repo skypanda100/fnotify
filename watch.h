@@ -9,7 +9,7 @@
 #include <unistd.h>
 #include "def.h"
 
-void handle_watch(int fd);
+void handle_watch(s_notify *ntf);
 void watch();
 
 #endif //FNOTIFY_WATCH_H

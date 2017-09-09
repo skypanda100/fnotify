@@ -14,7 +14,7 @@
 #include <sys/stat.h>
 #include "def.h"
 
-void handle_notify(int fd, struct inotify_event *event);
-void notify(char **path);
+void handle_notify(s_notify *ntf, struct inotify_event *event);
+void notify();
 
 #endif //FNOTIFY_NOTIFY_H

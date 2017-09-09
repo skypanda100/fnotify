@@ -4,8 +4,8 @@
 
 #include "config.h"
 
-extern s_conf *s_conf_p;
-extern int s_conf_p_len;
+extern s_notify *s_notify_p;
+extern int s_notify_p_len;
 
 static char *node = "fnotify";
 static char *key_path = "path";
@@ -191,11 +191,14 @@ void config(char *conf)
                         val_o = NULL;
                         val_delay = atoi(val);
 
-                        s_conf_p_len += 1;
-                        s_conf_p = (s_conf *)realloc(s_conf_p, sizeof(s_conf) * (s_conf_p_len));
-                        strcpy(s_conf_p[s_conf_p_len - 1].path, val_path);
-                        strcpy(s_conf_p[s_conf_p_len - 1].cmd, val_cmd);
-                        s_conf_p[s_conf_p_len - 1].delay = val_delay;
+                        s_notify_p_len += 1;
+                        s_notify_p = (s_notify *)realloc(s_notify_p, sizeof(s_notify) * s_notify_p_len);
+                        strcpy(s_notify_p[s_notify_p_len - 1].conf.path, val_path);
+                        strcpy(s_notify_p[s_notify_p_len - 1].conf.cmd, val_cmd);
+                        s_notify_p[s_notify_p_len - 1].conf.delay = val_delay;
+                        s_notify_p[s_notify_p_len - 1].notify_fd = -1;
+                        s_notify_p[s_notify_p_len - 1].s_watch_p = NULL;
+                        s_notify_p[s_notify_p_len - 1].s_watch_p_len = 0;
                     }
                     found = 0;
                 } else {
