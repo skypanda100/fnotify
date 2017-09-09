@@ -4,6 +4,10 @@
 #include "notify.h"
 #include "watch.h"
 
+/** conf container **/
+s_conf *s_conf_p = NULL;
+/** conf container length **/
+int s_conf_p_len = 0;
 /** watch container **/
 s_watch **s_watch_p = NULL;
 /** watch container length **/

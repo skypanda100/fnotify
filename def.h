@@ -11,9 +11,16 @@
 #define DEPTH 64
 #define DIR_MAX 256
 
-typedef struct watch{
+typedef struct watch
+{
     int wd;
     char wpath[PATH_MAX];
 }s_watch;
 
+typedef struct conf
+{
+    char path[PATH_MAX];
+    char cmd[PATH_MAX];
+    int delay;
+}s_conf;
 #endif //FNOTIFY_DEF_H

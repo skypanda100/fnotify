@@ -1,0 +1,20 @@
+//
+// Created by zhengdongtian on 17-9-9.
+//
+
+#ifndef FNOTIFY_CONFIG_H
+#define FNOTIFY_CONFIG_H
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <assert.h>
+#include <ctype.h>
+#include <errno.h>
+#include "def.h"
+
+#define KEY_VALUE_LEN 256
+
+void config(char *conf);
+
+#endif //FNOTIFY_CONFIG_H
