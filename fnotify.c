@@ -8,9 +8,14 @@ int s_notify_p_len = 0;
 
 int main(int argc,char **argv)
 {
-    config("/home/program/fnotify/fnotify.conf");
-    notify();
-    watch();
+    daemon(0, 0);
+
+    if(argc == 2)
+    {
+        config(argv[1]);
+        notify();
+        watch();
+    }
 
     return 0;
 }
