@@ -62,11 +62,18 @@ void handle_notify(int fd, struct inotify_event *event)
                 if(watch_index > -1)
                 {
                     int new_wd = inotify_add_watch(fd, new_path, flags);
-                    s_watch *s_w = (s_watch *)realloc(s_watch_p[watch_index], sizeof(s_watch) * (s_watch_len + 1));
-                    s_w[s_watch_len].wd = new_wd;
-                    strcpy(s_w[s_watch_len].wpath, new_path);
-                    s_watch_p[watch_index] = s_w;
-                    s_watch_p_len[watch_index] = s_watch_len + 1;
+                    if(new_wd == -1)
+                    {
+                        printf("inotify_add_watch failed[%s]\n", new_path);
+                    }
+                    else
+                    {
+                        s_watch *s_w = (s_watch *)realloc(s_watch_p[watch_index], sizeof(s_watch) * (s_watch_len + 1));
+                        s_w[s_watch_len].wd = new_wd;
+                        strcpy(s_w[s_watch_len].wpath, new_path);
+                        s_watch_p[watch_index] = s_w;
+                        s_watch_p_len[watch_index] = s_watch_len + 1;
+                    }
                 }
             }
         }
@@ -87,7 +94,7 @@ void handle_notify(int fd, struct inotify_event *event)
     }
 }
 
-int list_dir(char* path, int depth)
+void list_dir(char* path, int depth)
 {
     DIR *d;
     struct dirent *file;
@@ -97,7 +104,7 @@ int list_dir(char* path, int depth)
     if(!(d = opendir(path)))
     {
         printf("opendir failed[%s]\n", path);
-        return -1;
+        return;
     }
 
     while((file = readdir(d)) != NULL)
@@ -117,8 +124,6 @@ int list_dir(char* path, int depth)
         }
     }
     closedir(d);
-
-    return 0;
 }
 
 void init_notify(char **path)
@@ -128,7 +133,7 @@ void init_notify(char **path)
         int nd = inotify_init();
         if(nd == -1)
         {
-            printf("inotify_init failed");
+            printf("inotify_init failed\n");
             continue;
         }
 
@@ -151,18 +156,27 @@ void init_notify(char **path)
             s_w->wd = wd;
             strcpy(s_w->wpath, path[i]);
 
+            int valid_dirs_len = 0;
             memset(dirs, 0, sizeof(dirs) / sizeof(char));
             dirs_len = 0;
             list_dir(path[i], 1);
             for(int j = 0; j < dirs_len;j++)
             {
                 wd = inotify_add_watch(nd, dirs[j], flags);
-                s_w = (s_watch *)realloc(s_w, sizeof(s_watch) * (j + 2));
-                s_w[j + 1].wd = wd;
-                strcpy(s_w[j + 1].wpath, dirs[j]);
+                if(wd == -1)
+                {
+                    printf("inotify_add_watch failed[%s]\n", dirs[j]);
+                }
+                else
+                {
+                    valid_dirs_len++;
+                    s_w = (s_watch *)realloc(s_w, sizeof(s_watch) * (valid_dirs_len + 1));
+                    s_w[valid_dirs_len].wd = wd;
+                    strcpy(s_w[valid_dirs_len].wpath, dirs[j]);
+                }
             }
             s_watch_p[i] = s_w;
-            s_watch_p_len[i] = dirs_len + 1;
+            s_watch_p_len[i] = valid_dirs_len + 1;
         }
     }
 }
