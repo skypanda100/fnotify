@@ -31,6 +31,8 @@ void handle_watch(s_notify *ntf)
 
 void watch()
 {
+    struct timeval tv;
+    tv.tv_sec = 1;
     fd_set rd;
     while(1)
     {
@@ -45,23 +47,42 @@ void watch()
             }
         }
 
-        int ret = select(max_fd + 1, &rd, NULL, NULL, NULL);
+        int ret = select(max_fd + 1, &rd, NULL, NULL, &tv);
+
+        for(int i = 0; i < s_notify_p_len;i++)
+        {
+            time_t cmd_time = s_notify_p[i].time;
+            time_t now_time = time(NULL);
+            if(cmd_time == 0)
+            {
+                continue;
+            }
+            else
+            {
+                if(now_time - cmd_time >= s_notify_p[i].conf.delay)
+                {
+                    system(s_notify_p[i].conf.cmd);
+                    s_notify_p[i].time = 0;
+                }
+            }
+        }
+
         if(ret == -1)
         {
-            printf("select failed\n");
             continue;
         }
         else if(ret == 0)
         {
-            printf("select timeout\n");
             continue;
         }
-
-        for(int i = 0; i < s_notify_p_len;i++)
+        else
         {
-            if(FD_ISSET(s_notify_p[i].notify_fd, &rd))
+            for(int i = 0; i < s_notify_p_len;i++)
             {
-                handle_watch(&(s_notify_p[i]));
+                if(FD_ISSET(s_notify_p[i].notify_fd, &rd))
+                {
+                    handle_watch(&(s_notify_p[i]));
+                }
             }
         }
     }

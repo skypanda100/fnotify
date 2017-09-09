@@ -7,6 +7,8 @@
 
 #include <stdio.h>
 #include <unistd.h>
+#include <sys/time.h>
+#include <time.h>
 #include "def.h"
 
 void handle_watch(s_notify *ntf);

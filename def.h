@@ -6,6 +6,7 @@
 #define FNOTIFY_DEF_H
 
 #include <limits.h>
+#include <sys/time.h>
 
 #define BUF_LEN 1024
 #define DEPTH 64
@@ -30,6 +31,7 @@ typedef struct notify
     int notify_fd;
     s_watch *s_watch_p;
     int s_watch_p_len;
+    time_t time;
 }s_notify;
 
 #endif //FNOTIFY_DEF_H

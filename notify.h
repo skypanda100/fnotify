@@ -12,6 +12,7 @@
 #include <stdlib.h>
 #include <dirent.h>
 #include <sys/stat.h>
+#include <time.h>
 #include "def.h"
 
 void handle_notify(s_notify *ntf, struct inotify_event *event);

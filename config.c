@@ -199,6 +199,7 @@ void config(char *conf)
                         s_notify_p[s_notify_p_len - 1].notify_fd = -1;
                         s_notify_p[s_notify_p_len - 1].s_watch_p = NULL;
                         s_notify_p[s_notify_p_len - 1].s_watch_p_len = 0;
+                        s_notify_p[s_notify_p_len - 1].time = 0;
                     }
                     found = 0;
                 } else {

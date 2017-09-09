@@ -7,11 +7,8 @@
 extern s_notify *s_notify_p;
 extern int s_notify_p_len;
 
-/** sub dir container **/
 static char dirs[DIR_MAX][PATH_MAX];
-/** sub dir container length **/
 static int dirs_len = 0;
-/** notify flags **/
 static size_t flags = IN_CREATE | IN_CLOSE_WRITE | IN_MOVE | IN_MOVE_SELF | IN_DELETE | IN_DELETE_SELF;
 
 static void list_dir(char* path, int depth)
@@ -90,7 +87,7 @@ void handle_notify(s_notify *ntf, struct inotify_event *event)
                 //ignore hidden file
                 if(event->name[0] != '.')
                 {
-                    printf("file name = %s\n",event->name);
+                    ntf->time = time(NULL);
                 }
             }
         }
