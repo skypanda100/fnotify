@@ -4,5 +4,5 @@ project(fnotify)
 set(CMAKE_C_STANDARD 99)
 #set(CMAKE_BUILD_TYPE Release)
 
-set(SOURCE_FILES main.c)
+set(SOURCE_FILES fnotify.c)
 add_executable(fnotify ${SOURCE_FILES})
