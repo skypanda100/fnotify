@@ -26,7 +26,7 @@
     delay=3
     ```
 * execute  
-*because of deamon(0, 0),please set the conf's absolute path to the argument*
+*because of daemon(0, 0),please set the conf's absolute path to the argument*
     ```ini
     $ cd /root/fnotify
     $ ./fnotify /root/fnotify/fnotify.conf
