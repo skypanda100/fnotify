@@ -70,8 +70,7 @@ void config(char *conf)
         return;
     }
     fseek(fp, 0, SEEK_SET);
-    memset(key, 0, sizeof(key) / sizeof(char));
-    sprintf(key, "[%s]", node);
+
 
     while(!feof(fp) && fgets(buf_i, KEY_VALUE_LEN, fp) != NULL)
     {
@@ -82,6 +81,8 @@ void config(char *conf)
 
         if(found == 0)
         {
+            memset(key, 0, sizeof(key) / sizeof(char));
+            sprintf(key, "[%s]", node);
             if(buf[0] != '[')
             {
                 continue;
