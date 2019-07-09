@@ -10,18 +10,22 @@
 * build  
     ```ini
     $ cd /root/fnotify
-    $ make
+    $ mkdir build
+	$ cd build
+	$ CMAKE -DCMAKE_INSTALL_PREFIX=/usr/local ..
+	$ make
+	$ sudo make install
     ```
 * conf
 
     ```ini
     $ cat /root/fnotify/fnotify.conf
-    [fnotify]
+    [mtt]
     path=/root/jekyll-zdt/_posts
     cmd=jekyll build --source /root/jekyll-zdt
     delay=3
     
-    [fnotify]
+    [mtt]
     path=/root/jekyll-gg/_posts
     cmd=jekyll build --source /root/jekyll-gg
     delay=3
@@ -29,6 +33,5 @@
 * execute  
 *because of daemon(0, 0),please set the conf's absolute path to the argument*
     ```ini
-    $ cd /root/fnotify
-    $ ./fnotify /root/fnotify/fnotify.conf
+    $ fnotify /root/fnotify/fnotify.conf
     ```

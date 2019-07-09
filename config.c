@@ -7,7 +7,7 @@
 extern s_notify *s_notify_p;
 extern int s_notify_p_len;
 
-static char *node = "fnotify";
+static char *node = "mtt";
 static char *key_path = "path";
 static char *key_cmd = "cmd";
 static char *key_delay = "delay";
@@ -109,10 +109,10 @@ void config(char *conf)
                 if((c = strchr(buf, '=')) == NULL)
                     continue;
                 memset(key, 0, sizeof(key));
-                sscanf(buf, "%[^=|^ |^\t]", key);
+                sscanf(buf, "%[^= \t]", key);
                 if(strcmp(key, key_path) == 0)
                 {
-                    sscanf(++c, "%[^\n]", val_path);
+                    sscanf(++c, "%[^\n\r]", val_path);
                     char *val_o = (char *)malloc(strlen(val_path) + 1);
                     if(val_o != NULL){
                         memset(val_o, 0, strlen(val_path) + 1);
@@ -143,10 +143,10 @@ void config(char *conf)
                 if((c = strchr(buf, '=')) == NULL)
                     continue;
                 memset(key, 0, sizeof(key));
-                sscanf(buf, "%[^=|^ |^\t]", key);
+                sscanf(buf, "%[^= \t]", key);
                 if(strcmp(key, key_cmd) == 0)
                 {
-                    sscanf(++c, "%[^\n]", val_cmd);
+                    sscanf(++c, "%[^\n\r]", val_cmd);
                     char *val_o = (char *)malloc(strlen(val_cmd) + 1);
                     if(val_o != NULL){
                         memset(val_o, 0, strlen(val_cmd) + 1);
@@ -177,11 +177,11 @@ void config(char *conf)
                 if((c = strchr(buf, '=')) == NULL)
                     continue;
                 memset(key, 0, sizeof(key));
-                sscanf(buf, "%[^=|^ |^\t]", key);
+                sscanf(buf, "%[^= \t]", key);
                 if(strcmp(key, key_delay) == 0)
                 {
                     char val[20] = {0};
-                    sscanf(++c, "%[^\n]", val);
+                    sscanf(++c, "%[^\n\r]", val);
                     char *val_o = (char *)malloc(strlen(val) + 1);
                     if(val_o != NULL){
                         memset(val_o, 0, strlen(val) + 1);

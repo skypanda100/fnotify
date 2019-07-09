@@ -45,6 +45,7 @@ static void list_dir(char* path, int depth)
 
 void handle_notify(s_notify *ntf, struct inotify_event *event)
 {
+//    printf("%08X\n", event->mask);
     if(event->mask & IN_ISDIR)
     {
         if(event->len > 0)
